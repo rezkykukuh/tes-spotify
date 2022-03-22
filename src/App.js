@@ -87,7 +87,7 @@ function App() {
         <img src={data.album.images[1].url}/>
         <h2>{data.album.name}</h2>
         <h2>{data.artists[0].name}</h2>
-        <h3>penyanyi</h3>
+
         <button><a href={data.album.uri}>Pilih</a></button>
 
         </div>
