@@ -88,8 +88,7 @@ function App() {
         <h2>{data.album.name}</h2>
         <h2>{data.artists[0].name}</h2>
         <h3>penyanyi</h3>
-        <a href={data.album.uri}>Link</a><br/>
-        <button>Pilih</button>
+        <button><a href={data.album.uri}>Pilih</a></button>
 
         </div>
     </div>
