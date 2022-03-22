@@ -78,7 +78,7 @@ function App() {
     uri: "spotify:track:3z8h0TU7ReDPLIbEnYhWZb"
   };
 
-  console.log(data.album.uri)
+  console.log(data.uri)
 
   return (
     <div className="header">
@@ -88,7 +88,7 @@ function App() {
         <h2>{data.album.name}</h2>
         <h2>{data.artists[0].name}</h2>
 
-        <button><a href={data.album.uri}>Pilih</a></button>
+        <button><a href={data.uri}>Pilih</a></button>
 
         </div>
     </div>
