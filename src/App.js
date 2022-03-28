@@ -6,7 +6,10 @@ function App() {
   console.log(data.uri)
 
   return (
-  <Index/>
+    <div>
+      <Index/>
+      </div>
+
   )
 }
 

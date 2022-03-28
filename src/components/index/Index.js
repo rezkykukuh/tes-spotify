@@ -7,10 +7,12 @@ import data from '../data/data';
 const Index=()=>{
     return (
       <div>
+        {data.map((data) => {
+        return (
         <AlbumName Img={data.album.images[1].url}
         NameAlbum={data.album.name}
         NameArtist={data.artists[0].name}
-        ButtonUrl={data.uri}></AlbumName>
+        ButtonUrl={data.uri}/>)})}
       </div>
     );
   }
