@@ -8,4 +8,8 @@ const Subtitle = ({data}) => {
     return  <h6 className="card-subtitle mb-2 text-muted">{data.name} by artist {data.artists[0].name}</h6>
 }
 
-export {Title, Subtitle};
+const Link = ({data}) => {
+    return  <a className="music" href={data.uri}>link</a>
+}
+
+export {Title, Subtitle, Link};
