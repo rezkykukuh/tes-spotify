@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
-import { USERID } from "../components/data/spotifyconf";
-import CardPlaylist from "../components/spotify/spotify2/molecule/playlist/CardPlaylist";
-import ModalPlaylist from "../components/spotify/spotify2/molecule/playlist/ModalPlaylist";
+import { USERID } from "../data/spotifyconf";
+import CardPlaylist from "../components/molecule/playlist/CardPlaylist";
+import ModalPlaylist from "../components/molecule/playlist/ModalPlaylist";
 const CreatePlaylist = ({ token, auth, me }) => {
   const [playlist, setFromPlayList] = useState({
     title: "",
@@ -24,7 +24,7 @@ const CreatePlaylist = ({ token, auth, me }) => {
             Authorization: `Bearer ${token}`,
           },
         })
-        .then((response) => {
+        .then((response) => { 
           setData(response.data.items);
         })
         .catch((error) => {

@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import CardSelect from "../components/spotify/spotify2/molecule/track/CardSelect";
-import Input from "../components/spotify/spotify2/atoms/input";
-import ModalSelect from "../components/spotify/spotify2/molecule/track/ModalSelect";
+import CardSelect from "../components/molecule/track/CardSelect";
+import Input from "../components/atoms/input.jsx";
+import ModalSelect from "../components/molecule/track/ModalSelect";
 
 const SpotifyUseE = ({ token, auth, me }) => {
   const [query, setQuery] = useState("");
@@ -29,7 +29,7 @@ const SpotifyUseE = ({ token, auth, me }) => {
             market: "ID",
           },
         })
-        .then((response) => {
+        .then((response) => {console.log(response)
           combineData(response.data.tracks.items);
         })
         .catch((error) => {

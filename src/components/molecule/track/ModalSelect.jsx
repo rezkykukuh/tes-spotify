@@ -1,24 +1,33 @@
-import CardSelect from "../track/CardSelect";
+import { useState } from "react";
+import CardPlaylist from "../playlist/CardPlaylist";
 
-const ModalPlaylist = ({ playlist, token }) => {
+const ModalSelect = ({ select, data, playlist }) => {
+  const [choseplaylist, setPlaylist] = useState([]);
   const listplaylist = playlist.map((v) => (
     <div className="col-md-4 text-center p-3" key={v.id}>
-      <CardSelect data={v.track} display={false} />
+      <CardPlaylist data={v} />
+      <input
+        onChange={() => setPlaylist([v])}
+        className="form-check-input mt-3 bg-black"
+        type="radio"
+        name="flexRadioDefault"
+        id={v.id + "id"}
+      />
     </div>
   ));
   return (
     <div
       className="modal fade"
-      id="modalplaylist"
+      id="modalselect"
       tabIndex="-1"
-      aria-labelledby="modalplaylistLabel"
+      aria-labelledby="modalselectLabel"
       aria-hidden="true"
     >
       <div className="modal-dialog modal-xl">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
-              Playlist Items
+              Add To Playlist
             </h5>
             <button
               type="button"
@@ -29,6 +38,7 @@ const ModalPlaylist = ({ playlist, token }) => {
           <div className="modal-body">
             <div className="row">
               <div className="col-md-10">
+                <h4>Pilih Playlist</h4>
                 <div className="row">{listplaylist}</div>
               </div>
             </div>
@@ -41,6 +51,17 @@ const ModalPlaylist = ({ playlist, token }) => {
             >
               Close
             </button>
+            <button
+              onClick={() => {
+                select(data, choseplaylist);
+              }}
+              type="button"
+              className={`btn btn-primary ${
+                choseplaylist.length > 0 ? "" : "disabled"
+              }`}
+            >
+              Save changes
+            </button>
           </div>
         </div>
       </div>
@@ -48,4 +69,4 @@ const ModalPlaylist = ({ playlist, token }) => {
   );
 };
 
-export default ModalPlaylist;
+export default ModalSelect;

@@ -1,4 +1,4 @@
-import { urlGet } from "../../data/spotifyconf";
+import { urlGet } from "../data/spotifyconf";
 import { Link } from "react-router-dom";
 const Navbar = ({ auth, logout, me }) => {
   const getApiToken = auth ? (

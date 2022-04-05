@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import Navbar from "./components/spotify/spotify2/Navbar";
+import "./App.scss";
+import Navbar from "./components/Navbar";
 import CreatePlaylist from "./containers/CreatePlaylist";
-import SpotifyUseE from "./containers/SpotifyUseEffect";
+import SpotifyUseE from "./containers/SpotifyUseE";
 
 const App = () => {
   const [token, setToken] = useState("");
