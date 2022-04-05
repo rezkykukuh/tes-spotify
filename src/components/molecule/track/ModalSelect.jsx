@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import CardPlaylist from "../playlist/CardPlaylist";
 
-const ModalSelect = ({ select, data, playlist }) => {
+const ModalSelect = ({ select, data }) => {
+  const playlist = useSelector((state) => state.Playlist.playlist);
   const [choseplaylist, setPlaylist] = useState([]);
   const listplaylist = playlist.map((v) => (
     <div className="col-md-4 text-center p-3" key={v.id}>

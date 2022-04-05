@@ -1,40 +1,30 @@
-import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
-import { USERID } from "../data/spotifyconf";
+import { useSelector, useDispatch } from "react-redux";
 import CardPlaylist from "../components/molecule/playlist/CardPlaylist";
 import ModalPlaylist from "../components/molecule/playlist/ModalPlaylist";
-const CreatePlaylist = ({ token, auth, me }) => {
+import { setPlaylist } from "../store/Playlist";
+import { getPlaylistApi, postNewPlaylistApi } from "../utils/api/playlistApi";
+const CreatePlaylist = () => {
+  const token = useSelector((state) => state.Auth.token);
+  const data = useSelector((state) => state.Playlist.playlist);
+  const me = useSelector((state) => state.User.user);
+  const dispatch = useDispatch();
   const [playlist, setFromPlayList] = useState({
     title: "",
     describe: "",
   });
-  const [data, setData] = useState([]);
   const [modaldata, setModalData] = useState([]);
-  // https://api.spotify.com/v1/playlists/55w1jHg37wjz4ZTA0uQqXE/tracks
   useEffect(() => {
     getPlaylist();
   }, [token]);
 
   const getPlaylist = async () => {
-    if (auth) {
-      await axios
-        .get("https://api.spotify.com/v1/me/playlists", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => { 
-          setData(response.data.items);
-        })
-        .catch((error) => {
-          alert("Request Gagal");
-          if (error.response.status === 401 && error.response) {
-            window.localStorage.removeItem("token");
-            window.localStorage.removeItem("auth");
-            window.location.replace("/");
-          }
-        });
+    try {
+      const { data } = await getPlaylistApi();
+      dispatch(setPlaylist(data.items));
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -45,37 +35,25 @@ const CreatePlaylist = ({ token, auth, me }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (auth) {
+    if (token) {
       const data = {
         name: playlist.title,
         description: playlist.describe,
         public: true,
       };
-      await axios
-        .post(`https://api.spotify.com/v1/users/${me.id}/playlists`, data, {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
+      try {
+        postNewPlaylistApi(me.id, data).then(() => {
           setFromPlayList({ title: "", describe: "" });
           getPlaylist();
-          alert("Berhasil mempuat palylist");
-        })
-        .catch((error) => {
-          console.log(error);
-          if (error.response.status === 401 && error.response) {
-            window.localStorage.removeItem("token");
-            window.localStorage.removeItem("auth");
-            window.location.replace("/");
-          }
+          alert("Berhasil membuat palylist");
         });
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
-  const inputPlaylist = auth ? (
+  const inputPlaylist = token ? (
     <div className="mt-3">
       <h3>Input Playlist Form</h3>
       <form onSubmit={handleSubmit} className="mt-3">

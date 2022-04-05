@@ -3,28 +3,16 @@ import Img from "../../atoms/img";
 import { Subtitle } from "../../atoms/text";
 import { Title } from "../../atoms/text";
 import axios from "axios";
-import { useState } from "react";
-import { useEffect } from "react";
+import { setToken } from "../../../store/Auth";
+import { useDispatch } from "react-redux";
+import { getTrackPlaylistApi } from "../../../utils/api/playlistApi";
 
 const CardPlaylist = ({ data, event, token }) => {
   const requestItem = async () => {
-    const request = await axios
-      .get(`${data.tracks.href}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        event(response.data.items);
-      })
-      .catch((error) => {
-        alert("Request Gagal");
-        if (error.response.status === 401 && error.response) {
-          window.localStorage.removeItem("token");
-          window.localStorage.removeItem("auth");
-          window.location.replace("/");
-        }
-      });
+    console.log(data.tracks.href);
+    getTrackPlaylistApi(data.tracks.href).then((response) => {
+      event(response.data.items);
+    });
   };
   return (
     <div className="col-md-4 col-12 ">
@@ -50,5 +38,4 @@ const CardPlaylist = ({ data, event, token }) => {
     </div>
   );
 };
-
 export default CardPlaylist;
