@@ -1,7 +1,8 @@
-import { getStorage } from "./storage";
+import { deleteStorage, getStorage } from "./storage";
 
 export const isAuth = !!getStorage('token')
 const hash = window.location.hash;
+
 export const authGenerate = () => {
     if (isAuth) {
         return {
@@ -30,3 +31,10 @@ export const authGenerate = () => {
         token : token
     }
 }
+
+export const Logout = () => {
+    console.log("logout")
+    
+    deleteStorage();
+    window.location.reload();
+  };

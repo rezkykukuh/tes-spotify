@@ -1,6 +1,6 @@
 import CardSelect from "../track/CardSelect";
 
-const ModalPlaylist = ({ playlist, token }) => {
+const ModalPlaylist = ({ playlist, event }) => {
   const listplaylist = playlist.map((v) => (
     <div className="col-md-4 text-center p-3" key={v.id}>
       <CardSelect data={v.track} display={false} />
@@ -21,6 +21,7 @@ const ModalPlaylist = ({ playlist, token }) => {
               Playlist Items
             </h5>
             <button
+              onClick={() => event([])}
               type="button"
               className="btn-close"
               data-bs-dismiss="modal"
@@ -35,6 +36,7 @@ const ModalPlaylist = ({ playlist, token }) => {
           </div>
           <div className="modal-footer">
             <button
+              onClick={() => event([])}
               type="button"
               className="btn btn-secondary"
               data-bs-dismiss="modal"

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import CardSelect from "../components/molecule/track/CardSelect";
 import Input from "../components/atoms/input.jsx";
 import ModalSelect from "../components/molecule/track/ModalSelect";
@@ -7,6 +7,8 @@ import { setPlaylist } from "../store/Playlist";
 import { setSelectTrack, setTrack } from "../store/Tracks";
 import { getPlaylistApi, postItemPlaylistApi } from "../utils/api/playlistApi";
 import { searchTrackApi } from "../utils/api/searchTrackApi";
+import { urlGet } from "../utils/spotifyconf";
+import Navbar from "../components/Navbar";
 const SpotifyUseE = () => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.Auth.token);
@@ -71,7 +73,9 @@ const SpotifyUseE = () => {
       <Input get={setQuery} />
     </div>
   ) : (
-    <div className="btn btn-danger ma-5">Anda Belum Login</div>
+    <a href={urlGet} className="btn btn-danger">
+      Anda Belum Login
+    </a>
   );
 
   const getTrack =
@@ -105,20 +109,23 @@ const SpotifyUseE = () => {
     );
 
   return (
-    <div>
-      <div className="container-fluid p-3">
-        <div className="row">
-          <div className="col-md-3">
-            <div className="d-grid gap-2">{searchData}</div>
-          </div>
-          <div className="col-md-9">
-            <div className="row">{getTrack}</div>
+    <Fragment>
+      <Navbar />
+      <div>
+        <div className="container-fluid p-3">
+          <div className="row">
+            <div className="col-md-3">
+              <div className="d-grid gap-2">{searchData}</div>
+            </div>
+            <div className="col-md-9">
+              <div className="row">{getTrack}</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <ModalSelect select={handleSelect} data={modalData} />
-    </div>
+        <ModalSelect select={handleSelect} data={modalData} />
+      </div>
+    </Fragment>
   );
 };
 

@@ -1,33 +1,16 @@
-import { useEffect } from "react";
+import { Fragment } from "react";
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import CardPlaylist from "../components/molecule/playlist/CardPlaylist";
-import ModalPlaylist from "../components/molecule/playlist/ModalPlaylist";
-import { setPlaylist } from "../store/Playlist";
-import { getPlaylistApi, postNewPlaylistApi } from "../utils/api/playlistApi";
+import { useSelector } from "react-redux";
+import Navbar from "../components/Navbar";
+import { postNewPlaylistApi } from "../utils/api/playlistApi";
+import { urlGet } from "../utils/spotifyconf";
 const CreatePlaylist = () => {
   const token = useSelector((state) => state.Auth.token);
-  const data = useSelector((state) => state.Playlist.playlist);
   const me = useSelector((state) => state.User.user);
-  const dispatch = useDispatch();
   const [playlist, setFromPlayList] = useState({
     title: "",
     describe: "",
   });
-  const [modaldata, setModalData] = useState([]);
-  useEffect(() => {
-    getPlaylist();
-  }, [token]);
-
-  const getPlaylist = async () => {
-    try {
-      const { data } = await getPlaylistApi();
-      dispatch(setPlaylist(data.items));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleForm = (e) => {
     const { name, value } = e.target;
     setFromPlayList({ ...playlist, [name]: value });
@@ -44,7 +27,6 @@ const CreatePlaylist = () => {
       try {
         postNewPlaylistApi(me.id, data).then(() => {
           setFromPlayList({ title: "", describe: "" });
-          getPlaylist();
           alert("Berhasil membuat palylist");
         });
       } catch (error) {
@@ -117,44 +99,24 @@ const CreatePlaylist = () => {
     </div>
   ) : (
     <div className="d-grid gap-2 mt-2">
-      <div className="btn btn-danger">Anda Belum Login</div>
+      <a href={urlGet} className="btn btn-danger">
+        Anda Belum Login
+      </a>
     </div>
   );
 
-  const playlistCard =
-    data.length > 0 ? (
-      data.map((playlist) => {
-        return (
-          <CardPlaylist
-            key={playlist.id}
-            data={playlist}
-            event={setModalData}
-            token={token}
-          />
-        );
-      })
-    ) : (
-      <div className="container d-flex justify-content-center align-content-center">
-        <h1>Empty</h1>
-      </div>
-    );
-
   return (
-    <div>
-      <div className="container-fluid p-3">
-        <div className="row">
-          <div className="col-md-3">{inputPlaylist}</div>
-          <div className="col-md-9">
-            <h2 className="bg-success text-white p-2 text-center">
-              Your Playlist
-            </h2>
-            <div className="row">{playlistCard}</div>
+    <Fragment>
+      <Navbar />
+      <div>
+        <div className="container-fluid p-3">
+          <div className="row">
+            <div className="col-md-3">{inputPlaylist}</div>
+            <div className="col-md-9"></div>
           </div>
         </div>
       </div>
-
-      <ModalPlaylist playlist={modaldata} />
-    </div>
+    </Fragment>
   );
 };
 

@@ -1,26 +1,39 @@
 import { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import "./App.scss";
-import Navbar from "./components/Navbar";
 import CreatePlaylist from "./containers/CreatePlaylist";
 import SpotifyUseE from "./containers/SpotifyUseE";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setToken } from "./store/Auth";
 import { setUser } from "./store/User";
-import { isAuth } from "./utils/OAuth";
-import { deleteStorage } from "./utils/storage";
+import { authGenerate, isAuth } from "./utils/OAuth";
+import { deleteStorage, setStorage } from "./utils/storage";
 import { getUserApi } from "./utils/api/userApi";
+import { urlGet } from "./utils/spotifyconf";
+import { BrowserRouter as Router } from "react-router-dom";
+import Playlist from "./containers/Playlist";
+import NotFound from "./containers/NotFound";
+import Home from "./containers/Home";
 
 const App = () => {
-  let token = window.localStorage.getItem("token");
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.Auth.token);
   useEffect(() => {
+    setTokena();
     if (isAuth) {
-      dispatch(setToken(token));
       setMeProfile(token);
     }
   }, []);
 
+  const setTokena = () => {
+    try {
+      const { token } = authGenerate();
+      setStorage("token", token);
+      dispatch(setToken(token));
+    } catch (error) {
+      deleteStorage();
+    }
+  };
   const setMeProfile = async (tokena) => {
     try {
       await getUserApi()
@@ -36,22 +49,46 @@ const App = () => {
     }
   };
 
-  const logout = () => {
-    dispatch(setToken(""));
-    deleteStorage();
-    window.location.reload();
-  };
-
   return (
     <div className="App">
-      <Navbar logout={logout} />
-      {token ? (
-        <Routes>
-          <Route path="/" element={<SpotifyUseE />} />
-          <Route path="/playlist" element={<CreatePlaylist />} />
-        </Routes>
+      {isAuth ? (
+        <Router>
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={() => {
+                return isAuth ? (
+                  <Redirect to="/create-playlist" />
+                ) : (
+                  <Redirect to="/" />
+                );
+              }}
+            />
+
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route path="/create-playlist">
+              <CreatePlaylist />
+            </Route>
+            <Route path="/playlist">
+              <Playlist />
+            </Route>
+            <Route path="/track">
+              <SpotifyUseE />
+            </Route>
+            <Route path="*">
+              <NotFound />
+            </Route>
+          </Switch>
+        </Router>
       ) : (
-        <div className="btn btn-danger">Anda Belum Login</div>
+        <div className="container d-flex justify-content-center align-items-center vh-100">
+          <a href={urlGet} className="btn btn-danger">
+            Anda Belum Login, Klik Untuk Login
+          </a>
+        </div>
       )}
     </div>
   );

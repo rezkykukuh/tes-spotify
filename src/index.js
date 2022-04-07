@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from "react-router-dom";
+
 import "bootstrap/dist/js/bootstrap.bundle";
 import store from './store'
 import { Provider } from 'react-redux'
@@ -19,11 +19,10 @@ import { deleteStorage, setStorage } from './utils/storage';
 })()
 ReactDOM.render(
   <React.StrictMode>
-     <BrowserRouter>
      <Provider store={store}>
     <App />
   </Provider>,
-  </BrowserRouter>,
+
   </React.StrictMode>,
   document.getElementById('root')
 );

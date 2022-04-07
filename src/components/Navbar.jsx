@@ -1,12 +1,21 @@
 import { urlGet } from "../utils/spotifyconf";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Logout } from "../utils/OAuth";
+import { setToken } from "../store/Auth";
 const Navbar = ({ logout }) => {
   const token = useSelector((state) => state.Auth.token);
   const me = useSelector((state) => state.User.user).display_name;
-
+  const dispatch = useDispatch;
   const getApiToken = token ? (
-    <button onClick={() => logout()} type="button" className="btn btn-danger">
+    <button
+      onClick={() => {
+        Logout();
+        dispatch(setToken(""));
+      }}
+      type="button"
+      className="btn btn-danger"
+    >
       Halo {me}, Logout
     </button>
   ) : (
@@ -32,13 +41,31 @@ const Navbar = ({ logout }) => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to="/">
+              <Link className="nav-link" to="/">
+                Home
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link active" aria-current="page" to="/track">
                 Track
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/playlist">
+              <Link
+                className="nav-link active"
+                aria-current="page"
+                to="/playlist"
+              >
                 Playlist
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className="nav-link active"
+                aria-current="page"
+                to="/create-playlist"
+              >
+                Create Playlist
               </Link>
             </li>
           </ul>
